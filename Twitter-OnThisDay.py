@@ -38,7 +38,7 @@ def print_tweets(tweet, username):
         print(f"{tweet['years_ago']} years ago")
 
     print(tweet['date_string'])
-    print(tweet['tweet_content'])
+    print(f"\n{tweet['tweet_content']}\n")
     print(f"Likes: {tweet['likes']}")
     print(f"Retweets: {tweet['retweets']}")
     print(f"URL: https://x.com/{username}/status/{tweet['tweet_id']}")
@@ -57,10 +57,24 @@ with open(f'{os.getcwd()}/tweets.js', 'r', encoding='utf-8') as tweet_json:
 
 on_this_day = []  # Empty list that will contain tweet IDs of today's tweets
 
+print ("\nON THIS DAY ON TWITTER")
+option = input("\n1 - See today's tweets\n2 - Enter custom date\n")
+while True:
+    if option == "1":
+        selected_date = datetime.now()
+        break
+    elif option == "2":
+        selected_date = input ("Input a date (MM-DD): ")
+        selected_date = datetime.strptime(selected_date, "%m-%d")
+        break
+    else:
+        print ("Input a valid value!")
+
+
 # Extract same-day tweets and transfer to list
 for tweet in tweet_data:
     date_string, date_obj = format_date(tweet)
-    if date_only(date_obj.date()) == date_only(datetime.now()):
+    if date_only(date_obj.date()) == date_only(selected_date):
         years_ago = datetime.today().year - date_obj.year
         tweet_content = tweet['tweet']['full_text']
         likes = int(tweet['tweet']['favorite_count'])
@@ -71,11 +85,8 @@ for tweet in tweet_data:
 # Arrange tweets by dates in ascending order
 sorted_on_this_day = sorted(on_this_day, key=lambda tweet: tweet['date_obj'])
 
-print ("\nON THIS DAY ON TWITTER")
-input("\nPress ENTER to CONTINUE\n")
-
 # Print tweets
-print("You have reached the end!\n")
+print("\nYou have reached the end!\n")
 for tweet in sorted_on_this_day:
     print_tweets(tweet, username)
 
