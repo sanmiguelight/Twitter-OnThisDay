@@ -8,7 +8,7 @@ import json
 from datetime import datetime
 import pytz
 import os
-
+import webbrowser
 
 def format_date(tweet):
     date_raw = tweet['tweet']['created_at']
@@ -44,6 +44,9 @@ def print_tweets(tweet, username):
     print(f"URL: https://x.com/{username}/status/{tweet['tweet_id']}")
     print("___________________________\n")
 
+def load_tweets (tweet, username):
+    url = f"https://x.com/{username}/status/{tweet['tweet_id']}"
+    webbrowser.open(url, new=1, autoraise=True)
 
 # Open and read account.js
 with open(f'{os.getcwd()}/account.js', 'r', encoding='utf-8') as account_json:
@@ -90,6 +93,11 @@ print("\nYou have reached the end!\n")
 for tweet in sorted_on_this_day:
     print_tweets(tweet, username)
 
-print(f"Number of tweets this day: {len(sorted_on_this_day)}")
+print(f"Number of tweets this day: {len(sorted_on_this_day)}\n")
+load = input("\n1 - Load tweets on a web browser\n2 - Exit\n")
 
-input("\nPress ENTER to EXIT")
+if load == '1':
+    for tweet in sorted_on_this_day:
+        load_tweets (tweet, username)
+else:
+    print ("pass")
