@@ -60,18 +60,25 @@ with open(f'{os.getcwd()}/tweets.js', 'r', encoding='utf-8') as tweet_json:
 
 on_this_day = []  # Empty list that will contain tweet IDs of today's tweets
 
-print ("\nON THIS DAY ON TWITTER")
-option = input("\n1 - See today's tweets\n2 - Enter custom date\n")
+print ("ON THIS DAY ON TWITTER")
 while True:
+    option = input("\n1 - See today's tweets\n2 - Enter custom date\n0 - Exit\n")
     if option == "1":
         selected_date = datetime.now()
         break
     elif option == "2":
-        selected_date = input ("Input a date (MM-DD): ")
-        selected_date = datetime.strptime(selected_date, "%m-%d")
+        while True:
+            selected_date = input("Input a date (MM-DD): ")
+            try:
+                selected_date = datetime.strptime(selected_date, "%m-%d")
+                break
+            except Exception as e:
+                print("Please enter a valid date in the correct format!")
         break
+    elif option == "0":
+        exit()
     else:
-        print ("Input a valid value!")
+        print("Input a valid value!")
 
 
 # Extract same-day tweets and transfer to list
@@ -94,10 +101,16 @@ for tweet in sorted_on_this_day:
     print_tweets(tweet, username)
 
 print(f"Number of tweets this day: {len(sorted_on_this_day)}\n")
-load = input("\n1 - Load tweets on a web browser\n2 - Exit\n")
 
-if load == '1':
-    for tweet in sorted_on_this_day:
-        load_tweets (tweet, username)
-else:
-    print ("pass")
+while True:
+    load = input("\n1 - Load tweets on a web browser\n0 - Exit\n")
+    if load == '1':
+        for tweet in sorted_on_this_day:
+            load_tweets (tweet, username)
+        break
+    elif load == "0":
+        break
+    else:
+        print("Input a valid value!")
+
+print("Goodbye")
